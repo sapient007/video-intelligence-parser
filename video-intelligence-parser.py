@@ -40,6 +40,11 @@ def video_intelligence_annotate(outputfile):
                 entity["right"] = regexp_right.search(bounding_box).group(1)
                 entity["top"] = regexp_top.search(bounding_box).group(1)
                 entity["bottom"] = regexp_bottom.search(bounding_box).group(1)
+
+                # flag a zoom event in pub/sub
+                if (entity["entity_desc"].lower() == "person" and  float(entity["confidence"]) > 0.70):
+                    entity["zoom"] = True
+                    
                 publish_topic(entity)
 
 def publish_topic(entity):
