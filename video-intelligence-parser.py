@@ -50,10 +50,10 @@ def video_intelligence_annotate(outputfile):
                     float(entity["confidence"]) > 0.70 and \
                     (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=10 ))):
                     print("zoom event {}".format(datetime.datetime.now()))
-                    entity["zoom"] = True
+                    entity["zoom"] = "True"
                     last_zoom_event = datetime.datetime.now() 
                 else:
-                    entity["zoom"] = False
+                    entity["zoom"] = "False"
                 publish_topic(entity)
 
 def publish_topic(entity):
