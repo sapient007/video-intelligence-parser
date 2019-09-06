@@ -51,7 +51,9 @@ def video_intelligence_annotate(outputfile):
                     (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=10 ))):
                     print("zoom event {}".format(datetime.datetime.now()))
                     entity["zoom"] = True
-                    last_zoom_event = datetime.datetime.now()  
+                    last_zoom_event = datetime.datetime.now() 
+                else:
+                    entity["zoom"] = False
                 publish_topic(entity)
 
 def publish_topic(entity):
