@@ -20,10 +20,11 @@ regexp_bottom = re.compile(r"bottom : ([^\s]+)")
 topic_name = "projects/{}/topics/{}".format(os.getenv("GCP_PROJECT"), os.getenv("PUB_SUB_TOPIC"))
 publisher = pubsub_v1.PublisherClient()
 
-# tracking message publish time
-last_zoom_event = None
-
 def video_intelligence_annotate(outputfile):
+
+    # tracking message publish time
+    last_zoom_event = None
+    
     with io.open(outputfile, 'r') as video_intelligence_output:
         while True:
             entity = {}
@@ -47,7 +48,7 @@ def video_intelligence_annotate(outputfile):
 
                 # flag a zoom event in pub/sub
                 if (entity["entity_desc"].lower() == "person" and \
-                    float(entity["confidence"]) > 0.70 and \
+                    float(entity["confidence"]) > 0.60 and \
                     (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=10 ))):
                     print("zoom event {}".format(datetime.datetime.now()))
                     entity["zoom"] = "1"
