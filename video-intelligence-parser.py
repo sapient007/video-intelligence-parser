@@ -51,7 +51,7 @@ def video_intelligence_annotate(outputfile):
                     if (entity["entity_desc"].lower() == "person" and \
                         float(entity["confidence"]) > 0.60 and \
                         (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=10 ))):
-                        print("zoom event {}".format(datetime.datetime.now()))
+                        print("zoom event {} with confidence {}".format(entity["time"], entity["confidence"]))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now() 
                     else:
