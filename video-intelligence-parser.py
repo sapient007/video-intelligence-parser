@@ -57,8 +57,8 @@ def video_intelligence_annotate(outputfile):
                     else:
                         entity["zoom"] = "0"
                     publish_topic(entity)
-            except ValueError:
-                print("Error while parasing dectection: {}".format(ValueError))
+            except Exception as e:
+                print("Error while parasing dectection: {}".format(e))
 
 def publish_topic(entity):
     publisher.publish(topic_name, b'detected_objects', **entity) 
