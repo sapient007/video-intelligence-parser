@@ -49,9 +49,9 @@ def video_intelligence_annotate(outputfile):
 
                     # flag a zoom event in pub/sub
                     if (entity["entity_desc"].lower() == "car" and \
-                        float(entity["confidence"]) > 0.30 and \
+                        float(entity["confidence"]) > 0.60 and \
                         (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 ))):
-                        print("zoom event {} with confidence {}".format(entity["time"], entity["confidence"]))
+                        print("zoom event of {} occured at {} with confidence {}".format(entity["entity_desc"], entity["time"], entity["confidence"]))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now() 
                     else:
