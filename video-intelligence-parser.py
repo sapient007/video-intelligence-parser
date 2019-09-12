@@ -23,6 +23,7 @@ publisher = pubsub_v1.PublisherClient()
 def video_intelligence_annotate(outputfile):
 
     # tracking message publish time
+    last_zoom_entity_id = None
     last_zoom_event = None
 
     with io.open(outputfile, 'r') as video_intelligence_output:
@@ -46,14 +47,17 @@ def video_intelligence_annotate(outputfile):
                     entity["right"] = regexp_right.search(bounding_box).group(1)
                     entity["top"] = regexp_top.search(bounding_box).group(1)
                     entity["bottom"] = regexp_bottom.search(bounding_box).group(1)
+                    entity["device"] = "AXIS M1065-LW"
 
                     # flag a zoom event in pub/sub
                     if (entity["entity_desc"].lower() == "car" and \
                         float(entity["confidence"]) > 0.50 and \
+                        (last_zoom_entity_id is None or last_zoom_entity_id != entity["track_id"] ) and \
                         (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 ))):
                         print("zoom event of {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["time"], entity["confidence"], datetime.datetime.now()))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now() 
+                        last_zoom_entity_id = entity["track_id"]
                     else:
                         entity["zoom"] = "0"
                     publish_topic(entity)
