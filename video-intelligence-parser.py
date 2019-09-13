@@ -23,6 +23,7 @@ publisher = pubsub_v1.PublisherClient()
 def video_intelligence_annotate(outputfile):
 
     # tracking message publish time
+    last_zoom_entity_id = None
     last_zoom_event = None
     last_zoom_track_id = None 
 
@@ -47,6 +48,7 @@ def video_intelligence_annotate(outputfile):
                     entity["right"] = regexp_right.search(bounding_box).group(1)
                     entity["top"] = regexp_top.search(bounding_box).group(1)
                     entity["bottom"] = regexp_bottom.search(bounding_box).group(1)
+<<<<<<< HEAD
                     entity["device_id"] = "esp32_BCD168"
 
                     # flag a zoom event in pub/sub
