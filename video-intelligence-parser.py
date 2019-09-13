@@ -25,7 +25,7 @@ def video_intelligence_annotate(outputfile):
 
     # tracking message publish time
     last_zoom_event = None
-    last_zoom_entity_id = Set()
+    last_zoom_entity_id = set()
 
     with io.open(outputfile, 'r') as video_intelligence_output:
         while True:
