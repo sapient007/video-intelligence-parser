@@ -25,6 +25,9 @@ def process_videointelligence(event, context):
                event['attributes'].get('time'),
                int(event['attributes'].get('track_id')),
                zoom,
+               event['attributes'].get('device_id'),
+               event['attributes'].get('sensor_name'),
+               event['attributes'].get('stream_time'),
                )
 
     rows_to_insert = [
