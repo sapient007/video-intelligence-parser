@@ -50,7 +50,6 @@ def video_intelligence_annotate(outputfile):
                     entity["bottom"] = regexp_bottom.search(bounding_box).group(1)
                     entity["device_id"] = "esp32_BCD168"
                     entity["sensor_name"] = "esp32_BCD168"
-                    print(" Date Time Val: {}".format(os.getenv("DATE_TIME")))
                     entity["stream_time"] = str(os.getenv("DATE_TIME"))
 
                     # flag a zoom event in pub/sub
