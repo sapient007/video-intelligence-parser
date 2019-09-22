@@ -56,17 +56,12 @@ def video_intelligence_annotate(outputfile):
                     entity["sensor_name"] = "AXIS M1065-LW"
                     entity["stream_time"] = str(os.getenv("DATE_TIME"))
 
-                    #valiate the type of objects of interest
-                    try:
-                        if (detection_object != str(os.getenv("DETECT_OBJ_NAME"))):
-                            detection_object = str(os.getenv("DETECT_OBJ_NAME"))
-                            print("detection object is updated to {}".format(str(os.getenv("DETECT_OBJ_NAME"))))
-                        if (detection_confidence != float(os.getenv("DETECT_OBJ_CONFIDENCE"))):
-                            detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE"))
-                            print("detection object confidence is updated to {}".format(str(os.getenv("DETECT_OBJ_CONFIDENCE"))))
-                    except Exception as e:
-                        pass
-                        # nothing happnes assume default values
+                    # validate the type of objects of interest
+                    # nothing happens assume default values
+                    detection_object = os.getenv("DETECT_OBJ_NAME", detection_object)
+                    print("detection object name is {}".format(detection_object))
+                    detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE", detection_confidence))
+                    print("detection object confidence is {}".format(detection_confidence))
 
                     # flag a zoom event in pub/sub
                     if entity["entity_desc"].lower() == detection_object and \
