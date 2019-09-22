@@ -26,6 +26,10 @@ def video_intelligence_annotate(outputfile):
     # tracking message publish time
     last_zoom_event = None
     last_zoom_entity_id = set()
+    detection_object = "car"
+    detection_confidence = 0.50
+
+    
 
     with io.open(outputfile, 'r') as video_intelligence_output:
         while True:
@@ -52,9 +56,20 @@ def video_intelligence_annotate(outputfile):
                     entity["sensor_name"] = "AXIS M1065-LW"
                     entity["stream_time"] = str(os.getenv("DATE_TIME"))
 
+                    #valiate the type of objects of interest
+                    try:
+                        if (detection_object != str(os.getenv("DETECT_OBJ_NAME"))):
+                            detection_object = str(os.getenv("DETECT_OBJ_NAME"))
+                            print("detection object is updated to {}".format(str(os.getenv("DETECT_OBJ_NAME"))))
+                        if (detection_confidence != float(os.getenv("DETECT_OBJ_CONFIDENCE"))):
+                            detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE"))
+                            print("detection object confidence is updated to {}".format(str(os.getenv("DETECT_OBJ_CONFIDENCE"))))
+                    except Exception as e:
+                        # nothing happnes assume default values
+
                     # flag a zoom event in pub/sub
-                    if (entity["entity_desc"].lower() == "car" and \
-                        float(entity["confidence"]) > 0.60 and \
+                    if (entity["entity_desc"].lower() == detection_object and \
+                        float(entity["confidence"]) > detection_confidence and \
                         ( entity["entity_id"] not in last_zoom_entity_id) and \
                         (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 ))):
                         print("zoom event of {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["time"], entity["confidence"], datetime.datetime.now()))
