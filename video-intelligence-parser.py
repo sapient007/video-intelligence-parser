@@ -65,13 +65,14 @@ def video_intelligence_annotate(outputfile):
                             detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE"))
                             print("detection object confidence is updated to {}".format(str(os.getenv("DETECT_OBJ_CONFIDENCE"))))
                     except Exception as e:
+                        pass
                         # nothing happnes assume default values
 
                     # flag a zoom event in pub/sub
-                    if (entity["entity_desc"].lower() == detection_object and \
+                    if entity["entity_desc"].lower() == detection_object and \
                         float(entity["confidence"]) > detection_confidence and \
-                        ( entity["entity_id"] not in last_zoom_entity_id) and \
-                        (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 ))):
+                        entity["entity_id"] not in last_zoom_entity_id and \
+                        (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 )):
                         print("zoom event of {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["time"], entity["confidence"], datetime.datetime.now()))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now()
