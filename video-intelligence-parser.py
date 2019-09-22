@@ -58,10 +58,12 @@ def video_intelligence_annotate(outputfile):
 
                     # validate the type of objects of interest
                     # nothing happens assume default values
-                    detection_object = os.getenv("DETECT_OBJ_NAME", detection_object)
-                    print("detection object name is {}".format(detection_object))
-                    detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE", detection_confidence))
-                    print("detection object confidence is {}".format(detection_confidence))
+                    if detection_object != os.getenv("DETECT_OBJ_NAME", detection_object):
+                        detection_object = os.getenv("DETECT_OBJ_NAME")
+                        print("detection object name is {}".format(detection_object))
+                    if detection_confidence != float(os.getenv("DETECT_OBJ_CONFIDENCE", detection_confidence)):
+                        detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE"))
+                        print("detection object confidence is {}".format(detection_confidence))
 
                     # flag a zoom event in pub/sub
                     if entity["entity_desc"].lower() == detection_object and \
