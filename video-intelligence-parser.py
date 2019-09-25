@@ -66,8 +66,9 @@ def video_intelligence_annotate(outputfile):
                         print("detection object confidence is {}".format(detection_confidence))
 
                     # reset zoom entity every 5 mins
-                    if (last_zoom_event is not None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(minutes=5 )):
-                        last_zoom_entity_id.clear()
+                    if (last_zoom_event is not None):
+                        if (last_zoom_event <= datetime.datetime.now() - datetime.timedelta(minutes=5 )):
+                            last_zoom_entity_id.clear()
 
                     # flag a zoom event in pub/sub
                     if entity["entity_desc"].lower() == detection_object and \
