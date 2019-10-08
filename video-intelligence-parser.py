@@ -75,7 +75,7 @@ def video_intelligence_annotate(outputfile):
                         float(entity["confidence"]) > detection_confidence and \
                         entity["track_id"] not in last_zoom_track_id and \
                         (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 )):
-                        print("zoom event of {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["time"], entity["confidence"], datetime.datetime.now()))
+                        print("zoom event of {} for trackID {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["track_id"], entity["time"], entity["confidence"], datetime.datetime.now()))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now()
                         last_zoom_track_id.add(entity["entity_id"])
