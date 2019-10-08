@@ -78,7 +78,7 @@ def video_intelligence_annotate(outputfile):
                         print("zoom event of {} for trackID {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["track_id"], entity["time"], entity["confidence"], datetime.datetime.now()))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now()
-                        last_zoom_track_id.add(entity["entity_id"])
+                        last_zoom_track_id.add(entity["track_id"])
                     else:
                         entity["zoom"] = "0"
                     publish_topic(entity)
