@@ -25,7 +25,7 @@ def video_intelligence_annotate(outputfile):
 
     # tracking message publish time
     last_zoom_event = None
-    last_zoom_track_id = set()
+    last_zoom_entity_desc = set()
     detection_object = "car"
     detection_confidence = 0.50
 
@@ -65,20 +65,20 @@ def video_intelligence_annotate(outputfile):
                         detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE"))
                         print("detection object confidence is {}".format(detection_confidence))
 
-                    # reset zoom entity every 5 mins
+                    # reset zoom entity every 6 mins
                     if (last_zoom_event is not None):
-                        if (last_zoom_event <= datetime.datetime.now() - datetime.timedelta(minutes=5)):
-                            last_zoom_track_id.clear()
+                        if (last_zoom_event <= datetime.datetime.now() - datetime.timedelta(minutes=6)):
+                            last_zoom_entity_desc.clear()
 
                     # flag a zoom event in pub/sub
                     if entity["entity_desc"].lower() == detection_object and \
                         float(entity["confidence"]) > detection_confidence and \
-                        entity["track_id"] not in last_zoom_track_id and \
-                        (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=12 )):
+                        entity["entity_desc"] not in last_zoom_entity_desc and \
+                        (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=30 )):
                         print("zoom event of {} for trackID {} occured at {} with confidence {} with system time of {}".format(entity["entity_desc"], entity["track_id"], entity["time"], entity["confidence"], datetime.datetime.now()))
                         entity["zoom"] = "1"
                         last_zoom_event = datetime.datetime.now()
-                        last_zoom_track_id.add(entity["track_id"])
+                        last_zoom_entity_desc.add(entity["entity_desc"])
                     else:
                         entity["zoom"] = "0"
                     publish_topic(entity)
