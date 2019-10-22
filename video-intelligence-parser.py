@@ -27,6 +27,7 @@ def video_intelligence_annotate(outputfile):
     last_zoom_event = None
     last_zoom_entity_desc = set()
     detection_object = set(os.getenv("DETECTION_OBJS").split(","))
+    print("detection object(s) for:  {}".format(detection_object))
     detection_confidence = 0.50
 
     
