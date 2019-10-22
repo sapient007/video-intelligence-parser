@@ -26,7 +26,7 @@ def video_intelligence_annotate(outputfile):
     # tracking message publish time
     last_zoom_event = None
     last_zoom_entity_desc = set()
-    detection_object = "car"
+    detection_object = "{" + os.getenv("DETECTION_OBJ") + "}"
     detection_confidence = 0.50
 
     
@@ -58,9 +58,9 @@ def video_intelligence_annotate(outputfile):
 
                     # validate the type of objects of interest
                     # nothing happens assume default values
-                    if detection_object != os.getenv("DETECT_OBJ_NAME", detection_object):
-                        detection_object = os.getenv("DETECT_OBJ_NAME")
-                        print("detection object name is {}".format(detection_object))
+                    # if detection_object != os.getenv("DETECT_OBJ_NAME", detection_object):
+                    #     detection_object = os.getenv("DETECT_OBJ_NAME")
+                    #     print("detection object name is {}".format(detection_object))
                     if detection_confidence != float(os.getenv("DETECT_OBJ_CONFIDENCE", detection_confidence)):
                         detection_confidence = float(os.getenv("DETECT_OBJ_CONFIDENCE"))
                         print("detection object confidence is {}".format(detection_confidence))
@@ -71,7 +71,7 @@ def video_intelligence_annotate(outputfile):
                             last_zoom_entity_desc.clear()
 
                     # flag a zoom event in pub/sub
-                    if entity["entity_desc"].lower() == detection_object and \
+                    if entity["entity_desc"].lower() in detection_object and \
                         float(entity["confidence"]) > detection_confidence and \
                         entity["entity_desc"] not in last_zoom_entity_desc and \
                         (last_zoom_event is None or last_zoom_event <= datetime.datetime.now() - datetime.timedelta(seconds=30 )):
