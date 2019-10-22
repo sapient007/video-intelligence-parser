@@ -29,16 +29,12 @@ def video_intelligence_annotate(outputfile):
     detection_object = set(os.getenv("DETECTION_OBJS").split(","))
     print("detection object(s) for:  {}".format(detection_object))
     detection_confidence = 0.50
-
-    
-
     with io.open(outputfile, 'r') as video_intelligence_output:
         while True:
             entity = {}
             line = video_intelligence_output.readline()
             if not line:
                 time.sleep(5)
-
             try:
                 if "Entity description:" in line:
                     # process the next 5 lines
