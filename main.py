@@ -36,30 +36,36 @@ def process_videointelligence(event, context):
     def send_command(top, bottom, left, right):
         from google.cloud import iot_v1
 
-        project = 'IoT-Video-Demo'
+        project = 'iot-video-demo'
         region = 'us-central1'
         registry = 'esp32-registry'
         device = 'esp32_BCD168'
 
         iot_client = iot_v1.DeviceManagerClient()
-        iot_name = client.device_path(project, region, registry, device)
+        iot_name = iot_client.device_path(project, region, registry, device)
 
-        len_x = right - left
-        len_y = bottom - top
-        center_x = left + (len_x)
-        center_y = top + (len_y)
+        right_pixel = round(right * 1920)
+        left_pixel = round(left * 1920)
+        top_pixel = round(top * 1080)
+        bottom_pixel = round(bottom * 1080)
 
-        z = max(len_x, len_y)  # longer side to max zoom to
+        len_x = (right_pixel - left_pixel)
+        len_y = (bottom_pixel - top_pixel)
+        center_x = round((left_pixel) + (len_x / 2))
+        center_y = round((top_pixel) + (len_y / 2))
+
+        z = max((right - left), (bottom - top))  # longer side to max zoom to
         zo = Fraction(z).limit_denominator()  # removes float weirdness
         zoo = zo.denominator * 100
-        zoom = int(round(zoo / zo.numerator))   # sorry for var names, couldn't help it
+        zoom = round(zoo / zo.numerator)
 
         command = f'{{"x":{center_x},"y":{center_y},"zoom":{zoom}}}'
         binary_data = command.encode('utf-8')
 
         response = iot_client.send_command_to_device(iot_name, binary_data)
+        print(f'giraffe - {command} - l: {left_pixel} r: {right_pixel}
+                                      t: {top_pixel} b: {bottom_pixel}')
         return response
 
     if zoom:
         zoomed = send_command(top, bottom, left, right)
-        print(zoomed)
